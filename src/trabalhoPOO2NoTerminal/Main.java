@@ -22,53 +22,20 @@ public class Main {
 		}
 		return comidaPosicaoTracker;
 	}
-	
-	public static int[] moverRobô(String escolha, int x, int y, int[] robôPosicaoTracker){
-		switch(escolha){
-			case "up":
-				if(robôPosicaoTracker[1]-1<0){
-				}
-				else {
-					robôPosicaoTracker[1]--;
-				}
-			break;
-			case "down":
-				if(robôPosicaoTracker[1]+1>y-1){
-				}
-				else {
-					robôPosicaoTracker[1]++;
-				}
-			break;
-			case "right":
-				if(robôPosicaoTracker[0]+1>x-1){
-				}
-				else{
-					robôPosicaoTracker[0]++;
-				}
-			break;
-			case "left":
-				if(robôPosicaoTracker[0]-1<0){
-				}
-				else{
-					robôPosicaoTracker[0]--;
-				}
-		}
-		return robôPosicaoTracker;
-	}
-	
 	public static void main(String args[]){
 		
 		int tamanhoY = 7;
 		int tamanhoX = 11;
 		int[] robôPosicaoTracker = {tamanhoX/2,tamanhoY/2};
+		int[] robôIntPosicaoTracker = {tamanhoX/2,tamanhoY/2};
 		int[] comidaPosicaoTracker = new int[2];
 		comidaPosicaoTracker = setarPosicaoComida(tamanhoX,tamanhoY,robôPosicaoTracker);
 		boolean jogoAtivo = true;
 		Scanner scanner = new Scanner(System.in);
 		Robô robô = new Robô();
+		RobôInteligente robôInt = new RobôInteligente();
 		
 		while(jogoAtivo == true) {
-			String escolha = new String();
 			for(int y = 0;y<tamanhoY;y++) {
 				for(int x = 0;x<tamanhoX;x++){
 					if(x == robôPosicaoTracker[0] && y == robôPosicaoTracker[1]){
@@ -77,25 +44,47 @@ public class Main {
 					else if(x == comidaPosicaoTracker[0] && y == comidaPosicaoTracker[1]){
 						System.out.print("O");
 					}
+					else if(x == robôIntPosicaoTracker[0] && y == robôIntPosicaoTracker[1]){
+						System.out.print("%");
+					}
 					else {
 						System.out.print("-");
 					}
 				}
 				System.out.println(" ");
 			}
-			System.out.println("Pontuação: "+robô.getPontuacao());
-			System.out.println("Posição: "+"("+robô.getPosicaoX()+","+robô.getPosicaoY()+")");
+			
+			System.out.println("Pontuação Jogador: "+robô.getPontuacao());
+			System.out.println("Posição Jogador: "+"("+robô.getPosicaoX()+","+robô.getPosicaoY()+")");
+			System.out.println("Pontuação Robô: "+robôInt.getPontuacao());
+			System.out.println("Posição Robô: "+"("+robôInt.getPosicaoX()+","+robôInt.getPosicaoY()+")");
 			System.out.println("Escolha a direção que quer ir ou escreva cancelar para acabar.");
-			escolha = scanner.next();
-			robôPosicaoTracker = moverRobô(escolha,tamanhoX,tamanhoY,robôPosicaoTracker);
-			robô = robô.mover(escolha,tamanhoX,tamanhoY,robô);
+			
+			String entrada = scanner.nextLine();
+			try {
+				int escolha = Integer.parseInt(entrada);
+				robô = robô.mover(escolha,tamanhoX,tamanhoY,robô);
+				robôPosicaoTracker = robô.moverTracker(escolha,tamanhoX,tamanhoY,robôPosicaoTracker);
+			}
+			catch(NumberFormatException e){
+				robô = robô.mover(entrada,tamanhoX,tamanhoY,robô);
+				robôPosicaoTracker = robô.moverTracker(entrada,tamanhoX,tamanhoY,robôPosicaoTracker);
+			}
+			
+			int escolhaInt = robôInt.gerarAção();
+			System.out.println(escolhaInt);
+			robôInt.mover(tamanhoX, tamanhoY, escolhaInt, robôInt);
+			robôIntPosicaoTracker = robôInt.moverTrackerInt(escolhaInt, tamanhoX, tamanhoY, robôIntPosicaoTracker);
+			
 			if(comidaPosicaoTracker[0]==robôPosicaoTracker[0]&&comidaPosicaoTracker[1]==robôPosicaoTracker[1]){
 				comidaPosicaoTracker = setarPosicaoComida(tamanhoX,tamanhoY,robôPosicaoTracker);
 				robô.setPontuacao(robô.getPontuacao()+1);
 			}
-			else if(escolha.contentEquals("cancelar")){
-				jogoAtivo = false;
+			else if(comidaPosicaoTracker[0]==robôIntPosicaoTracker[0]&&comidaPosicaoTracker[1]==robôIntPosicaoTracker[1]){
+				comidaPosicaoTracker = setarPosicaoComida(tamanhoX,tamanhoY,robôPosicaoTracker);
+				robôInt.setPontuacao(robôInt.getPontuacao()+1);
 			}
+			
 		}
 	}
 }
