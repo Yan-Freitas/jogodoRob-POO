@@ -1,90 +1,166 @@
 package trabalhoPOO2NoTerminal;
 
-import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-	
-	public static int[] setarPosicaoComida(int x, int y, int[] robôPosicaoTracker){
-		boolean éIgual = true;
-		int[] comidaPosicaoTracker = new int[2];
-		Random random = new Random();
-		while(éIgual == true){
-			comidaPosicaoTracker[0] = random.nextInt(x);
-			comidaPosicaoTracker[1] = random.nextInt(y);
-			if(comidaPosicaoTracker[0]==robôPosicaoTracker[0]&&comidaPosicaoTracker[1]==robôPosicaoTracker[1]){
-				System.out.print(robôPosicaoTracker[0]);
-				continue;
-			}
-			else {
-				éIgual=false;
-			}
-		}
-		return comidaPosicaoTracker;
-	}
 	public static void main(String args[]){
-		
-		int tamanhoY = 7;
-		int tamanhoX = 11;
-		int[] robôPosicaoTracker = {tamanhoX/2,tamanhoY/2};
-		int[] robôIntPosicaoTracker = {tamanhoX/2,tamanhoY/2};
-		int[] comidaPosicaoTracker = new int[2];
-		comidaPosicaoTracker = setarPosicaoComida(tamanhoX,tamanhoY,robôPosicaoTracker);
 		boolean jogoAtivo = true;
 		Scanner scanner = new Scanner(System.in);
-		Robô robô = new Robô();
-		RobôInteligente robôInt = new RobôInteligente();
-		
-		while(jogoAtivo == true) {
-			for(int y = 0;y<tamanhoY;y++) {
-				for(int x = 0;x<tamanhoX;x++){
-					if(x == robôPosicaoTracker[0] && y == robôPosicaoTracker[1]){
-						System.out.print("#");
+		int opcao;
+        do{
+            System.out.println("---Menu Inicial---");
+            System.out.println("1) Iniciar Jogo");
+			System.out.println("2) Robôs Automáticos");
+			System.out.println("3) Robô Inteligente e Robô Burro");
+            System.out.println("4) Sair");
+            do{
+                System.out.print("Digite uma opção válida: ");
+                opcao=scanner.nextInt();
+            }while(opcao!=1 && opcao!=2 && opcao!=3 && opcao!=4);
+            if(opcao==1){
+                Robo robo;
+                int cor;
+                System.out.println("---Cor do Robô---");
+                System.out.println("1) Azul");
+                System.out.println("2) Vermelho");
+                System.out.println("3) Verde");
+                System.out.println("4) Rosa");
+                do{
+                    System.out.print("Digite uma opção válida: ");
+                    cor=scanner.nextInt();
+                }while(cor!=1 && cor!=2 && cor!=3 && cor!=4);
+                if(cor==1){
+                    robo=new Robo("AZUL");
+                }else if(cor==2){
+                    robo=new Robo("VERMELHO");
+                }else if(cor==3){
+                    robo=new Robo("VERDE");
+                }else{
+                    robo=new Robo("ROSA");
+                }
+                System.out.println("---Posição do Alimento---");
+                int x,y;
+                boolean valido=false;
+                Alimento comida=null;
+                do{
+                    try{
+                        System.out.print("Indice x: ");
+                        x=scanner.nextInt();
+                        System.out.print("Indice y: ");
+                        y=scanner.nextInt();
+                        comida=new Alimento(x, y);
+                        valido=true;
+                    }catch(ForaDoLimiteGridException e){
+                        System.out.println(e.getMessage());
+                        System.out.println("Tente Novamente");
+                    }
+                }while(!valido);
+                int movimento;
+                Grid grid=new Grid();
+                grid.mostrarGrid(robo, comida);
+                do{
+                    System.out.println("---Movimento do Robô---");
+                    System.out.println("1) Up");
+                    System.out.println("2) Down");
+                    System.out.println("3) Right");
+                    System.out.println("4) Left");
+                    valido=false;
+                    do{
+                        do{
+                            System.out.print("Digite uma opção válida: ");
+                            movimento=scanner.nextInt();
+                        }while(movimento!=1 && movimento!=2 && movimento!=3 && movimento!=4);
+                        try{
+                            robo.mover(movimento);
+                            robo.setPontuacao(robo.getPontuacao()+1);
+                            valido=true;
+                        } catch (MovimentoInvalidoException e) {
+                            System.out.println(e.getMessage());
+                            System.out.println("Tente Novamente");
+                        } catch (ForaDoLimiteGridException e){
+                            System.out.println(e.getMessage());
+                            System.out.println("Tente Novamente");
+                        }
+                    }while(!valido);
+                    grid.mostrarGrid(robo, comida);
+                }while(!robo.encontrarAlimento(comida));
+                System.out.println("Robô encontrou a comida!");
+                System.out.println("Pontuação Jogador: "+robo.getPontuacao());
+				System.out.println("Posição Jogador: "+"("+robo.getPosicaoX()+","+robo.getPosicaoY()+")");
+				System.out.println("Escolha a direção que quer ir ou escreva cancelar para acabar.");
+            }else if(opcao==2){
+				Robo robo1=new Robo("Azul");
+				Robo robo2=new Robo("Vermelho");
+				Robo[] robos={robo1, robo2};
+				System.out.println("---Posição do Alimento---");
+                int x,y;
+                boolean valido=false;
+                Alimento comida=null;
+                do{
+                    try{
+                        System.out.print("Indice x: ");
+                        x=scanner.nextInt();
+                        System.out.print("Indice y: ");
+                        y=scanner.nextInt();
+                        comida=new Alimento(x, y);
+                        valido=true;
+                    }catch(ForaDoLimiteGridException e){
+                        System.out.println(e.getMessage());
+                        System.out.println("Tente Novamente");
+                    }
+                }while(!valido);
+                Grid grid=new Grid();
+				grid.mostrarGrid(robos, comida);
+				String continuar;
+				do{
+					try{
+						robo1.mover();
+						robo2.mover();
+					}catch(MovimentoInvalidoException e){
+						System.out.println(e.getMessage());
+                        System.out.println("Tente Novamente");
+					}catch(ForaDoLimiteGridException e){
+						System.out.println(e.getMessage());
+                        System.out.println("Tente Novamente");
 					}
-					else if(x == comidaPosicaoTracker[0] && y == comidaPosicaoTracker[1]){
-						System.out.print("O");
-					}
-					else if(x == robôIntPosicaoTracker[0] && y == robôIntPosicaoTracker[1]){
-						System.out.print("%");
-					}
-					else {
-						System.out.print("-");
-					}
-				}
-				System.out.println(" ");
-			}
-			
-			System.out.println("Pontuação Jogador: "+robô.getPontuacao());
-			System.out.println("Posição Jogador: "+"("+robô.getPosicaoX()+","+robô.getPosicaoY()+")");
-			System.out.println("Pontuação Robô: "+robôInt.getPontuacao());
-			System.out.println("Posição Robô: "+"("+robôInt.getPosicaoX()+","+robôInt.getPosicaoY()+")");
-			System.out.println("Escolha a direção que quer ir ou escreva cancelar para acabar.");
-			
-			String entrada = scanner.nextLine();
-			try {
-				int escolha = Integer.parseInt(entrada);
-				robô = robô.mover(escolha,tamanhoX,tamanhoY,robô);
-				robôPosicaoTracker = robô.moverTracker(escolha,tamanhoX,tamanhoY,robôPosicaoTracker);
-			}
-			catch(NumberFormatException e){
-				robô = robô.mover(entrada,tamanhoX,tamanhoY,robô);
-				robôPosicaoTracker = robô.moverTracker(entrada,tamanhoX,tamanhoY,robôPosicaoTracker);
-			}
-			
-			int escolhaInt = robôInt.gerarAção();
-			System.out.println(escolhaInt);
-			robôInt.mover(tamanhoX, tamanhoY, escolhaInt, robôInt);
-			robôIntPosicaoTracker = robôInt.moverTrackerInt(escolhaInt, tamanhoX, tamanhoY, robôIntPosicaoTracker);
-			
-			if(comidaPosicaoTracker[0]==robôPosicaoTracker[0]&&comidaPosicaoTracker[1]==robôPosicaoTracker[1]){
-				comidaPosicaoTracker = setarPosicaoComida(tamanhoX,tamanhoY,robôPosicaoTracker);
-				robô.setPontuacao(robô.getPontuacao()+1);
-			}
-			else if(comidaPosicaoTracker[0]==robôIntPosicaoTracker[0]&&comidaPosicaoTracker[1]==robôIntPosicaoTracker[1]){
-				comidaPosicaoTracker = setarPosicaoComida(tamanhoX,tamanhoY,robôPosicaoTracker);
-				robôInt.setPontuacao(robôInt.getPontuacao()+1);
-			}
-			
-		}
+					grid.mostrarGrid(robos, comida);
+					System.out.println("Aperte ENTER para continuar: ");
+					continuar=scanner.nextLine();
+				}while(!robo1.encontrarAlimento(comida) && !robo2.encontrarAlimento(comida));
+				System.out.println("Robô encontrou a comida!");
+                System.out.println("Pontuação Jogador: "+robo1.getPontuacao());
+				System.out.println("Posição Jogador: "+"("+robo1.getPosicaoX()+","+robo1.getPosicaoY()+")");
+				System.out.println("Pontuação Jogador: "+robo2.getPontuacao());
+				System.out.println("Posição Jogador: "+"("+robo2.getPosicaoX()+","+robo2.getPosicaoY()+")");
+				System.out.println("Escolha a direção que quer ir ou escreva cancelar para acabar.");
+			}else if(opcao==3){
+				Robo roboBurro=new Robo("Azul");
+				RoboInteligente roboInteligente=new RoboInteligente("Vermelho");
+				Robo[] robos={roboBurro, roboInteligente};
+				System.out.println("---Posição do Alimento---");
+                int x,y;
+                boolean valido=false;
+                Alimento comida=null;
+                do{
+                    try{
+                        System.out.print("Indice x: ");
+                        x=scanner.nextInt();
+                        System.out.print("Indice y: ");
+                        y=scanner.nextInt();
+                        comida=new Alimento(x, y);
+                        valido=true;
+                    }catch(ForaDoLimiteGridException e){
+                        System.out.println(e.getMessage());
+                        System.out.println("Tente Novamente");
+                    }
+                }while(!valido);
+                Grid grid=new Grid();
+                grid.mostrarGrid(robos, comida);
+			}else{
+                jogoAtivo=false;
+            }
+        }while(jogoAtivo);
+        scanner.close();
 	}
 }
+
