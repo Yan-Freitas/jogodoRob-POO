@@ -47,6 +47,8 @@ public class RoboInteligente extends Robo{
 			setMovimentosInvalidos(getMovimentosInvalidos()+1);
             throw new ForaDoLimiteGridException();
         }
+		setPosicaoAnteriorX(getPosicaoX());
+		setPosicaoAnteriorY(getPosicaoY());
         setPosicaoX(x);
         setPosicaoY(y);
 		setMovimentosValidos(getMovimentosValidos()+1);

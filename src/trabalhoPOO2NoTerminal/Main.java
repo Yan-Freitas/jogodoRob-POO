@@ -9,14 +9,15 @@ public class Main {
 		int opcao;
         do{
             System.out.println("---Menu Inicial---");
-            System.out.println("1) Iniciar Jogo");
+            System.out.println("1) Robô Controlado pelo Usuário");
 			System.out.println("2) Robôs Automáticos");
 			System.out.println("3) Robô Inteligente e Robô Burro");
-            System.out.println("4) Sair");
+            System.out.println("4) Robôs e Obstáculos");
+            System.out.println("5) Sair");
             do{
                 System.out.print("Digite uma opção válida: ");
                 opcao=scanner.nextInt();
-            }while(opcao!=1 && opcao!=2 && opcao!=3 && opcao!=4);
+            }while(opcao!=1 && opcao!=2 && opcao!=3 && opcao!=4 && opcao!=5);
             if(opcao==1){
                 Robo robo;
                 int cor;
@@ -128,9 +129,15 @@ public class Main {
 					continuar=scanner.nextLine();
 				}while(!robo1.encontrarAlimento(comida) && !robo2.encontrarAlimento(comida));
 				System.out.println("Robô encontrou a comida!");
+                System.out.println("---Robô 1---");
                 System.out.println("Pontuação Jogador: "+robo1.getPontuacao());
+                System.out.println("Movimentos Válidos: "+robo1.getMovimentosValidos());
+                System.out.println("Movimentos Inválidos: "+robo1.getMovimentosInvalidos());
 				System.out.println("Posição Jogador: "+"("+robo1.getPosicaoX()+","+robo1.getPosicaoY()+")");
+                System.out.println("---Robô 2---");
 				System.out.println("Pontuação Jogador: "+robo2.getPontuacao());
+                System.out.println("Movimentos Válidos: "+robo2.getMovimentosValidos());
+                System.out.println("Movimentos Inválidos: "+robo2.getMovimentosInvalidos());
 				System.out.println("Posição Jogador: "+"("+robo2.getPosicaoX()+","+robo2.getPosicaoY()+")");
 				System.out.println("Escolha a direção que quer ir ou escreva cancelar para acabar.");
 			}else if(opcao==3){
@@ -156,7 +163,9 @@ public class Main {
                 }while(!valido);
                 Grid grid=new Grid();
                 grid.mostrarGrid(robos, comida);
-			}else{
+			}else if(opcao==4){
+
+            }else{
                 jogoAtivo=false;
             }
         }while(jogoAtivo);

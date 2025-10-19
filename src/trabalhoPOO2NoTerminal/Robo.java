@@ -6,8 +6,11 @@ public class Robo {
 	private String cor;
 	private int posicaoX;
 	private int posicaoY;
+	private int posicaoAnteriorX;
+	private int posicaoAnteriorY;
 	private int movimentosValidos;
 	private int movimentosInvalidos;
+	private boolean ativo=true;
 	private int pontuacao;
 
 	public Robo(String cor, int indiceX, int indiceY, int movimentosValidos, int movimentosInvalidos, int pontuacao){
@@ -51,6 +54,22 @@ public class Robo {
 	public void setPosicaoY(int posicaoY) {
 		this.posicaoY = posicaoY;
 	}
+
+	public int getPosicaoAnteriorX() {
+		return posicaoAnteriorX;
+	}
+
+	public void setPosicaoAnteriorX(int posicaoX) {
+		this.posicaoAnteriorX = posicaoX;
+	}
+
+	public int getPosicaoAnteriorY() {
+		return posicaoAnteriorY;
+	}
+
+	public void setPosicaoAnteriorY(int posicaoY) {
+		this.posicaoAnteriorY = posicaoY;
+	}
 	
 	public int getPontuacao() {
 		return pontuacao;
@@ -71,6 +90,10 @@ public class Robo {
 	}
 	public void setMovimentosInvalidos(int movimentosInvalidos) {
 		this.movimentosInvalidos = movimentosInvalidos;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
 	}
 
 	public int gerarAção(){
@@ -100,6 +123,8 @@ public class Robo {
 			movimentosInvalidos++;
             throw new ForaDoLimiteGridException();
         }
+		posicaoAnteriorX=posicaoX;
+		posicaoAnteriorY=posicaoY;
         posicaoX=x;
         posicaoY=y;
 		movimentosValidos++;
@@ -127,6 +152,8 @@ public class Robo {
 			movimentosInvalidos++;
             throw new ForaDoLimiteGridException();
         }
+		posicaoAnteriorX=posicaoX;
+		posicaoAnteriorY=posicaoY;
         posicaoX=x;
         posicaoY=y;
 		movimentosValidos++;
@@ -158,6 +185,8 @@ public class Robo {
 			setMovimentosInvalidos(getMovimentosInvalidos()+1);
             throw new ForaDoLimiteGridException();
         }
+		posicaoAnteriorX=posicaoX;
+		posicaoAnteriorY=posicaoY;
         setPosicaoX(x);
         setPosicaoY(y);
 		setMovimentosValidos(getMovimentosValidos()+1);

@@ -1,7 +1,7 @@
 package trabalhoPOO2NoTerminal;
 
 public class Alimento {
-    private int posicaoX;
+   private int posicaoX;
    private int posicaoY;
 
    public Alimento(int var1, int var2) throws ForaDoLimiteGridException {
