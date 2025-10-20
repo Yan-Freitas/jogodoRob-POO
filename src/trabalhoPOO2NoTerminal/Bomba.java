@@ -8,5 +8,6 @@ public class Bomba extends Obstaculo{
     @Override
     public void bater(Robo robo) {
         robo.setAtivo(false);
+        removerObstaculo(this);
     }
 }

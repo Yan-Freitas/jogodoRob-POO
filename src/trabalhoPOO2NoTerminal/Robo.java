@@ -11,15 +11,13 @@ public class Robo {
 	private int movimentosValidos;
 	private int movimentosInvalidos;
 	private boolean ativo=true;
-	private int pontuacao;
 
-	public Robo(String cor, int indiceX, int indiceY, int movimentosValidos, int movimentosInvalidos, int pontuacao){
+	public Robo(String cor, int indiceX, int indiceY, int movimentosValidos, int movimentosInvalidos){
 		this.cor=cor;
 		this.posicaoX=indiceX;
 		this.posicaoY=indiceY;
 		this.movimentosValidos=movimentosValidos;
 		this.movimentosInvalidos=movimentosInvalidos;
-		this.pontuacao=pontuacao;
 	}
 
 	public Robo(String cor){
@@ -28,7 +26,6 @@ public class Robo {
 		this.posicaoY=0;
 		this.movimentosValidos=0;
 		this.movimentosInvalidos=0;
-		this.pontuacao=0;
 	}
 	
 	public String getCor() {
@@ -70,13 +67,6 @@ public class Robo {
 	public void setPosicaoAnteriorY(int posicaoY) {
 		this.posicaoAnteriorY = posicaoY;
 	}
-	
-	public int getPontuacao() {
-		return pontuacao;
-	}
-	public void setPontuacao(int pontuacao) {
-		this.pontuacao = pontuacao;
-	}
 
 	public int getMovimentosValidos() {
 		return movimentosValidos;
@@ -92,6 +82,10 @@ public class Robo {
 		this.movimentosInvalidos = movimentosInvalidos;
 	}
 
+	public boolean getAtivo() {
+		return ativo;
+	}
+
 	public void setAtivo(boolean ativo) {
 		this.ativo = ativo;
 	}
@@ -102,6 +96,9 @@ public class Robo {
 	}
 	
 	public void mover(String escolha) throws MovimentoInvalidoException, ForaDoLimiteGridException{
+		if (!getAtivo()) {
+			return;
+		}
 		int x=posicaoX;
         int y=posicaoY;
         if(escolha.toUpperCase()=="UP"){
@@ -131,6 +128,9 @@ public class Robo {
 	}
 
 	public void mover(int escolha) throws MovimentoInvalidoException, ForaDoLimiteGridException{
+		if (!getAtivo()) {
+			return;
+		}
 		int x=posicaoX;
         int y=posicaoY;
         if(escolha==1){
@@ -160,6 +160,9 @@ public class Robo {
 	}
 
 	public void mover() throws MovimentoInvalidoException, ForaDoLimiteGridException{
+		if (!getAtivo()) {
+			return;
+		}
 		int escolha=gerarAção();
 		int x=getPosicaoX();
 		int y=getPosicaoY();
@@ -185,15 +188,20 @@ public class Robo {
 			setMovimentosInvalidos(getMovimentosInvalidos()+1);
             throw new ForaDoLimiteGridException();
         }
-		posicaoAnteriorX=posicaoX;
-		posicaoAnteriorY=posicaoY;
+		setPosicaoAnteriorX(getPosicaoX());
+		setPosicaoAnteriorY(getPosicaoY());
         setPosicaoX(x);
         setPosicaoY(y);
 		setMovimentosValidos(getMovimentosValidos()+1);
+		Obstaculo obstaculo = Obstaculo.procurarObstaculo(x, y);
+		if (obstaculo != null) {
+			obstaculo.bater(this);
+		}
 	}
 
 	public boolean encontrarAlimento(Alimento comida){
         if(comida.getPosicaoX()==posicaoX && comida.getPosicaoY()==posicaoY){
+			setAtivo(false);
             return true;
         }else{
             return false;
