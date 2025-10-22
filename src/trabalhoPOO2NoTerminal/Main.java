@@ -263,6 +263,7 @@ public class Main {
                                 System.out.println("Tente Novamente");
                             }
                         }catch(ForaDoLimiteGridException e){
+							--i;
                             System.out.println(e.getMessage());
                             System.out.println("Tente Novamente");
                         }
@@ -287,6 +288,7 @@ public class Main {
                                 System.out.println("Tente Novamente");
                             }
                         }catch(ForaDoLimiteGridException e){
+							--i;
                             System.out.println(e.getMessage());
                             System.out.println("Tente Novamente");
                         }
